@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -231,12 +233,96 @@ namespace CarRentalConsole
                     Console.WriteLine("Invalid car ID or the car is not rented by you. Press any key to continue.");
                 }
                 Console.ReadKey();
+
+
             }
             else
             {
                 Console.WriteLine("Invalid car ID. Press any key to continue.");
                 Console.ReadKey();
+
             }
+           
+       
+
+        }
+
+        public static void ListRentedCars()
+        {
+            Console.Clear();
+            Console.WriteLine("Rented Cars");
+            Console.WriteLine("--------------------------------------");
+
+
+
+
+
+            SqlConnection conn = SqlConnections.GetConnections();
+
+            List<RentDetailes> Elist = new List<RentDetailes>();
+            try
+            {
+                //  SqlCommand cmd = conn.CreateCommand();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text; // change
+                cmd.CommandText = "Select * from Rent_tbl ";     //    change
+
+                // cmd.Parameters.AddWithValue("@EmpNo", EmpNo);
+
+                SqlDataReader dr = cmd.ExecuteReader();
+
+
+                while (dr.Read())
+                {
+                    RentDetailes rent = new RentDetailes();
+                    
+                    rent.CarId= Convert.ToInt32(dr["Car_Id"]);
+                    rent.CustmerName = dr.GetString("CustomerName");
+                    rent.Address = dr.GetString("Address");
+                    rent.MobileNo = dr.GetString("MobileNo");
+                    rent.RentalDate = dr.GetDateTime("RentDate");
+                   
+                    rent.RentalFee= Convert.ToInt32(dr["RentalFee"]); 
+
+                    Elist.Add(rent);
+                }
+                Console.WriteLine("fetched");
+                
+                // return Elist;
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.Message);
+            }
+            finally
+            {
+
+                conn.Close();
+
+            }
+            // return null;
+
+            Console.WriteLine("\nCar Inventory:");
+            // for (int i = 0; i < carInventory.Count; i++)
+            //foreach (Car c in Elist)
+            //{
+            //    Console.WriteLine($"{c.CarId} {c.Brand} {c.Model} {c.Year} - {(c.IsAvailable ? "Available" : "Rented")}");
+            //}
+            Console.WriteLine("+------+-----------------+-----------------+------------+---------------------+------------+");
+            Console.WriteLine("|  ID  | Customer Name   |    Address      | Mobile No  | Rent Date           | RentalFee  |");
+            Console.WriteLine("+------+-----------------+-----------------+------------+---------------------+------------+");
+            foreach (RentDetailes c in Elist)
+            {
+                Console.WriteLine($"| {c.CarId,-5}| {c.CustmerName,0} | {c.Address,-10} | {c.MobileNo,-10} | {c.RentalDate,-10} | {c.RentalFee,-10} |");
+               // Console.WriteLine(String.Format("{0,-5} {1,-20} {2, -10} {3, -10}{4, -10}{5, -10} \n", c.CarId, c.CustmerName, c.Address, c.MobileNo, c.RentalDate, c.RentalFee)); 
+            }
+            Console.WriteLine("+------+-----------------+-----------------+------------+---------------------+------------+");
+
+
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
         }
     }
 }

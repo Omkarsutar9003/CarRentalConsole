@@ -31,10 +31,8 @@ internal class Program
                 case "3":
                     User.RegisterNewUser();
                     break;
+    
                 case "4":
-                    Methods.ListAvailableCars();
-                    break;
-                case "5":
                     Console.WriteLine("Goodbye!");
                     return;
                 default:

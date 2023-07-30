@@ -92,8 +92,9 @@ namespace CarRentalConsole
                 Console.WriteLine("----------");
                 Console.WriteLine("1. Add Car to Inventory");
                 Console.WriteLine("2. Remove Car from Inventory");
-                Console.WriteLine("3. List Available Cars");
-                Console.WriteLine("4. Logout");
+                Console.WriteLine("3. List of Rented Cars");
+                Console.WriteLine("4. List of Available Cars");
+                Console.WriteLine("5. Logout");
                 Console.Write("Enter your choice: ");
                 string choice = Console.ReadLine();
 
@@ -106,9 +107,12 @@ namespace CarRentalConsole
                         Methods.RemoveCarFromInventory();
                         break;
                     case "3":
-                        Methods.ListAvailableCars();
+                        Methods.ListRentedCars();
                         break;
                     case "4":
+                        Methods.ListAvailableCars();
+                        break;
+                    case "5":
                         CarRentalSystem.Logout();
                         return;
                     default:
